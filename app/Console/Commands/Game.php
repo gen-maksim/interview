@@ -3,16 +3,17 @@
 namespace App\Console\Commands;
 
 use App\Models\TicField;
+use App\Service\GameService;
 use Illuminate\Console\Command;
 
-class NewGame extends Command
+class Game extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'game:new';
+    protected $signature = 'game:play {row} {column}';
 
     /**
      * The console command description.
@@ -38,10 +39,17 @@ class NewGame extends Command
      */
     public function handle()
     {
-        TicField::query()->delete();
+        $tic = TicField::firstOrNew();
+        $game = new GameService();
 
-        $this->info('game has been deleted');
-        $this->info('to start a new one, use game:play');
+        $result = $game->recordMove([$this->argument('row'), $this->argument('column')], $tic);
+
+        foreach ($tic->field as $row) {
+            $this->info(implode('|' , $row));
+        }
+
+        $this->info($result['message']);
+
         return 0;
     }
 }

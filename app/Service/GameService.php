@@ -6,7 +6,16 @@ namespace App\Service;
 
 class GameService
 {
-    public function recordMove($coordinates, $ticField, $is_system = 0)
+    /**
+     * Main method for the game. Records moves and checks for a win
+     *
+     * @param $coordinates
+     * @param $ticField
+     * @param int $is_system
+     *
+     * @return array
+     */
+    public function recordMove($coordinates, $ticField, $is_system = 0): array
     {
         $field = $ticField->field;
         [$r, $c] = $coordinates;
@@ -23,6 +32,8 @@ class GameService
         $ticField->field = $field;
 
         if ($this->isWinningMove($field, $coordinates, $is_system)) {
+            $ticField->save();
+
             return [
                 'message' => 'Game over)',
                 'status' => true,
@@ -43,7 +54,13 @@ class GameService
         ];
     }
 
-    public function calcSystemMove($ticField)
+    /**
+     * Calculates coordinates for a system move.
+     *
+     * @param $ticField
+     * @return bool
+     */
+    public function calcSystemMove($ticField): bool
     {
         for ($i = 0; $i < 3; $i++) {
             for ($j = 0; $j < 3; $j++) {
@@ -56,11 +73,20 @@ class GameService
                     return true;
                 }
             }
-
         }
+        return false;
     }
 
-    public function isWinningMove($field, $coordinates, $is_system)
+    /**
+     * Checks if move leads to win
+     *
+     * @param $field
+     * @param $coordinates
+     * @param $is_system
+     *
+     * @return bool
+     */
+    public function isWinningMove($field, $coordinates, $is_system): bool
     {
         [$r, $c] = $coordinates;
 
@@ -89,5 +115,7 @@ class GameService
                 return true;
             }
         }
+
+        return false;
     }
 }

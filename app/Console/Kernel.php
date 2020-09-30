@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\Game;
+use App\Console\Commands\GameStatus;
 use App\Console\Commands\NewGame;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -17,6 +18,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Game::class,
         NewGame::class,
+        GameStatus::class,
     ];
 
     /**
